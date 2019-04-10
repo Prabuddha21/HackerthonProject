@@ -3,6 +3,8 @@
 import React, {Component} from 'react';
 
 import Home from './components/Home';
+import SignUp from './components/SignUp';
+import Login from './components/Login';
 
 export default class AppContainer extends Component{
 
@@ -13,9 +15,17 @@ export default class AppContainer extends Component{
         })
     }
 
+    // signUp(user){
+    //     this.setState(function (state) {
+    //         users: state.users.concat();
+    //     })
+    // }
+
     render() {
         return <div>
             <Home/>
+            <SignUp/>
+            <Login/>
         </div>;
     }
 }
