@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="#" method="post" id="demoForm" class="demoForm">
+    <fieldset>
+        <legend>Province------------District-------WashRoomName</legend>
+
+        <select name="category">
+            <option value="p1">Northern</option>
+            <option value="p2">North Western</option>
+            <option value="p3">Western</option>
+            <option value="p4">NorthCentral</option>
+            <option value="p5">Central</option>
+            <option value="p6">Sabaragamuwa</option>
+            <option value="p7">Eastern</option>
+            <option value="p8">Uva</option>
+            <option value="p9">Southern</option>
+        </select>
+
+        <select name="choices" id="choices">
+        </select>
+        <select name="choices2" id="choices2">
+        </select>
+
+    </fieldset>
+</form>
+
+<script>
+    var Select_List_Data = {
+
+        'choices': {
+
+            p1: {
+                text: ['Jaffna', 'Kilinochchi', 'Mannar', 'Mullathivu', 'Vavuniya'],
+                value: ['jaffna', 'kilinochchi', 'mannar', 'mullathivu', 'vavuniya']
+            },
+
+            p2: {
+                text: ['Puttalam', 'Kurunegale'],
+                value: ['puttalam','kurunegale']
+            },
+
+            p3: {
+                text: ['Gampaha', 'Colombo','Kaluthara'],
+                value: ['gampaha','colombo','kaluthara']
+            },
+
+            p4: {
+                text: ['Anuradhapura', 'Polonnaruwa'],
+                value: ['anuradhapura','polonnaruwa']
+            },
+
+            p5: {
+                text: ['Mathale', 'Kandy','NuwaraEliya'],
+                value: ['mathale','kandy','nuwaraeliya']
+            },
+
+            p6: {
+                text: ['Kegalle', 'Rathnapura'],
+                value: ['kegalle','rathnapura']
+            },
+
+            p7: {
+                text: ['Trincomalee', 'Batticaloa','Ampara'],
+                value: ['trincomalee','batticaloa','ampara']
+            },
+
+            p8: {
+                text: ['Badulla', 'Monaragala'],
+                value: ['badulla','monaragala']
+            },
+
+            p9: {
+                text: ['Hambantota', 'Matara','Galle'],
+                value: ['hambantota','matara','galle']
+            }
+        }
+
+
+    };
+
+    var Select_List_Data2= {
+
+        'choices2': {
+            p1: {
+                text: ['Jack', 'Loo', 'Bog', 'Khazi', 'Netty'],
+                value: ['Jack', 'Loo', 'Bog', 'Khazi', 'Netty']
+            },
+
+            p2: {
+                text: ['John', 'Crapper'],
+                value: ['John', 'Crapper']
+            },
+
+            p3: {
+                text: ['Latrine', 'Loo', 'Netty'],
+                value: ['Latrine', 'Loo', 'Netty']
+            },
+
+            p4: {
+                text: ['Crapper', 'Dunny'],
+                value: ['Crapper', 'Dunny']
+            },
+
+            p5: {
+                text: ['Bog', 'Crapper', 'Netty'],
+                value: ['Bog', 'Crapper', 'Netty']
+            },
+
+            p6: {
+                text: ['Jack', 'Bog'],
+                value: ['Jack', 'Bog']
+            },
+
+            p7: {
+                text: ['Netty', 'Latrine', 'Dunny'],
+                value: ['Netty', 'Latrine', 'Dunny']
+            },
+
+            p8: {
+                text: ['Loo', 'Khazi'],
+                value: ['Loo', 'Khazi']
+            },
+
+            p9: {
+                text: ['Netty', 'Bog', 'Crapper'],
+                value: ['Netty', 'Bog', 'Crapper']
+            }
+        }
+    };
+
+    function removeAllOptions(sel, removeGrp) {
+        var len, groups, par;
+        if (removeGrp) {
+            groups = sel.getElementsByTagName('optgroup');
+            len = groups.length;
+            for (var i=len; i; i--) {
+                sel.removeChild( groups[i-1] );
+            }
+        }
+
+        len = sel.options.length;
+        for (var i=len; i; i--) {
+            par = sel.options[i-1].parentNode;
+            par.removeChild( sel.options[i-1] );
+        }
+    }
+
+    function appendDataToSelect(sel, obj) {
+        var f = document.createDocumentFragment();
+        var labels = [], group, opts;
+
+        function addOptions(obj) {
+            var f = document.createDocumentFragment();
+            var o;
+
+            for (var i=0, len=obj.text.length; i<len; i++) {
+                o = document.createElement('option');
+                o.appendChild( document.createTextNode( obj.text[i] ) );
+
+                if ( obj.value ) {
+                    o.value = obj.value[i];
+                }
+
+                f.appendChild(o);
+            }
+            return f;
+        }
+
+        if ( obj.text ) {
+            opts = addOptions(obj);
+            f.appendChild(opts);
+        } else {
+            for ( var prop in obj ) {
+                if ( obj.hasOwnProperty(prop) ) {
+                    labels.push(prop);
+                }
+            }
+
+            for (var i=0, len=labels.length; i<len; i++) {
+                group = document.createElement('optgroup');
+                group.label = labels[i];
+                f.appendChild(group);
+                opts = addOptions(obj[ labels[i] ] );
+                group.appendChild(opts);
+            }
+        }
+        sel.appendChild(f);
+    }
+
+    document.forms['demoForm'].elements['category'].onchange = function(e) {
+
+        var relName = 'choices';
+
+        var relList = this.form.elements[ relName ];
+
+        var obj = Select_List_Data[ relName ][ this.value ];
+
+        removeAllOptions(relList, true);
+
+        appendDataToSelect(relList, obj);
+    };
+
+    (function() {
+
+        var form = document.forms['demoForm'];
+
+        var sel = form.elements['category'];
+        sel.selectedIndex = 0;
+
+        var relName = 'choices';
+
+        var rel = form.elements[ relName ];
+
+        var data = Select_List_Data[ relName ][ sel.value ];
+
+        appendDataToSelect(rel, data);
+
+    }());
+
+    (function() {
+
+        var form = document.forms['demoForm'];
+
+        var sel = form.elements['category'];
+        sel.selectedIndex = 0;
+
+        var relName = 'choices2';
+
+        var rel = form.elements[ relName ];
+
+        var data = Select_List_Data2[ relName ][ sel.value ];
+
+        appendDataToSelect(rel, data);
+
+    }());
+
+
+
+    </script>
+
+</body>
+</html>
